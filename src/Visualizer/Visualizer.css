@@ -1,0 +1,17 @@
+.visualizer{
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+.array-box{
+    width: 100%;
+    position: absolute;
+    bottom: 1rem;
+}
+.array-bar{
+min-width: 10px;
+background-color: white;
+display: inline-block;
+margin: 0 2px;
+
+}
