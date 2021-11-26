@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './DashBoard.css'
 import { Form, Button } from 'react-bootstrap'
 import Visualizer from '../Visualizer/Visualizer'
-import { getMergeSortAnimations, getBubbleSortAnimation } from '../SortingAlgorithums'
+import { getMergeSortAnimations, getBubbleSortAnimation, getSelectionSortAnimation } from '../SortingAlgorithums'
 const DashBoard = () => {
     var options = ['Bubble Sort', 'Selection Sort', 'Insertion Sort', 'Quick Sort', 'Merge Sort']
     const [Method, setMethod] = useState('Bubble Sort')
@@ -39,6 +39,9 @@ const DashBoard = () => {
                 break
             case 'Bubble Sort':
                 bubbleSort()
+                break
+            case 'Selection Sort':
+                selectionsort()
                 break
             default:
                 bubbleSort();
@@ -81,12 +84,40 @@ const DashBoard = () => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
                 }, i * SpeedOfSorting);
-            }else{
+            } else {
                 setTimeout(() => {
                     const [barOneIdx, newHeight] = animations[i];
                     const barOneStyle = arrayBars[barOneIdx].style;
                     barOneStyle.height = `${newHeight * 5}px`;
                 }, i * SpeedOfSorting);
+            }
+        }
+    }
+    const selectionsort = () => {
+        const animations = getSelectionSortAnimation(Array);
+        const arrayBars = document.getElementsByClassName('array-bar');
+        for (let i = 0; i < animations.length; i++) {
+            const isColorChange = i % 2===0;
+            if (isColorChange) {
+                const [barOneIdx] = animations[i];
+                const [barTwoIdx] = animations[i + 1];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = 'red';
+                    barTwoStyle.backgroundColor = 'red';
+                }, i * SpeedOfSorting*10);
+            } else {
+                const [barOneIdx, barOneHeight] = animations[i - 1];
+                const [barTwoIdx, barTwoHeight] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = 'white';
+                    barTwoStyle.backgroundColor = 'white';
+                    barOneStyle.height = `${barOneHeight * 5}px`;
+                    barTwoStyle.height = `${barTwoHeight * 5}px`;
+                }, i * SpeedOfSorting*10);
             }
         }
     }

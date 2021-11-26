@@ -98,3 +98,21 @@ export function getBubbleSortAnimation(arr) {
   }
   return animations
 }
+export function getSelectionSortAnimation(arr) {
+  const animations = [];
+  for (var i = 0; i < arr.length; i++) {
+      let min = i;
+      for (var j = i + 1; j < arr.length; j++) {
+          if (arr[min] > arr[j]) {
+              min = j;
+          }
+      }
+      if (i !== min) {
+          [arr[ i ],arr[min]]= [arr[min],arr[ i ]];
+          animations.push([i,arr[i]])
+          animations.push([min,arr[min]])
+  
+      }
+  }
+  return animations
+}
