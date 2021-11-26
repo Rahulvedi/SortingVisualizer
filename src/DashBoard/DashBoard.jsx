@@ -128,6 +128,10 @@ const DashBoard = () => {
         <div className='dashboard'>
             {/* <FormSection/> */}
             <div className='form-section'>
+                <h1 style={{
+                    'color':'white',
+                    'fontFamily':'cursive'
+                }}>Sorting Visualizer</h1>
                 <Form className='d-flex flex-column justify-content-center'>
                     <Form.Group className='p-3'>
                         <Form.Label className='label'>Sorting Methods</Form.Label>
