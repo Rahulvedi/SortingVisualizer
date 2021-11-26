@@ -11,9 +11,16 @@ const DashBoard = () => {
     // const [IsSorting, setIsSorting] = useState(false)
     const [Array, setArray] = useState([]);
     // const [Max, setMax] = useState(100);
+    const ResetArray = () => {
+        const array = [];
+        for (let i = 0; i <= SizeOfArray; i++) {
+            array.push(randomIntFromInterval(10, 100));
+        }
+        setArray(array);
+    }
     useEffect(() => {
         ResetArray();
-        console.log(Array)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleMethodChange = (e) => {
         setMethod(e.target.value)
@@ -24,13 +31,6 @@ const DashBoard = () => {
     }
     const OnSpeedChange = (e) => {
         setSpeedOfSorting(e.target.value)
-    }
-    const ResetArray = () => {
-        const array = [];
-        for (let i = 0; i <= SizeOfArray; i++) {
-            array.push(randomIntFromInterval(10, 100));
-        }
-        setArray(array);
     }
     const StartSorting = () => {
         switch (Method) {
