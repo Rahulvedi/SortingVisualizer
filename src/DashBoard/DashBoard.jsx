@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './DashBoard.css'
 import { Form, Button } from 'react-bootstrap'
 import Visualizer from '../Visualizer/Visualizer'
-import { getMergeSortAnimations, getBubbleSortAnimation, getSelectionSortAnimation } from '../SortingAlgorithums'
+import { getMergeSortAnimations, getBubbleSortAnimation, getSelectionSortAnimation, getInsertionSortAnimation } from '../SortingAlgorithums'
 const DashBoard = () => {
     var options = ['Bubble Sort', 'Selection Sort', 'Insertion Sort', 'Quick Sort', 'Merge Sort']
     const [Method, setMethod] = useState('Bubble Sort')
@@ -33,6 +33,7 @@ const DashBoard = () => {
         setSpeedOfSorting(e.target.value)
     }
     const StartSorting = () => {
+        // setIsSorting(true)
         switch (Method) {
             case 'Merge Sort':
                 mergeSort()
@@ -42,6 +43,9 @@ const DashBoard = () => {
                 break
             case 'Selection Sort':
                 selectionsort()
+                break
+            case 'Insertion Sort':
+                insertionsort()
                 break
             default:
                 bubbleSort();
@@ -83,13 +87,13 @@ const DashBoard = () => {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * SpeedOfSorting);
+                }, i * SpeedOfSorting * 5);
             } else {
                 setTimeout(() => {
                     const [barOneIdx, newHeight] = animations[i];
                     const barOneStyle = arrayBars[barOneIdx].style;
                     barOneStyle.height = `${newHeight * 5}px`;
-                }, i * SpeedOfSorting);
+                }, i * SpeedOfSorting * 5);
             }
         }
     }
@@ -97,7 +101,7 @@ const DashBoard = () => {
         const animations = getSelectionSortAnimation(Array);
         const arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 0; i < animations.length; i++) {
-            const isColorChange = i % 2===0;
+            const isColorChange = i % 2 === 0;
             if (isColorChange) {
                 const [barOneIdx] = animations[i];
                 const [barTwoIdx] = animations[i + 1];
@@ -106,7 +110,7 @@ const DashBoard = () => {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = 'red';
                     barTwoStyle.backgroundColor = 'red';
-                }, i * SpeedOfSorting*10);
+                }, i * SpeedOfSorting * 10);
             } else {
                 const [barOneIdx, barOneHeight] = animations[i - 1];
                 const [barTwoIdx, barTwoHeight] = animations[i];
@@ -117,9 +121,33 @@ const DashBoard = () => {
                     barTwoStyle.backgroundColor = 'white';
                     barOneStyle.height = `${barOneHeight * 5}px`;
                     barTwoStyle.height = `${barTwoHeight * 5}px`;
-                }, i * SpeedOfSorting*10);
+                }, i * SpeedOfSorting * 10);
             }
         }
+    }
+    const insertionsort = () => {
+        const animations = getInsertionSortAnimation(Array);
+        console.log(animations)
+        const arrayBars = document.getElementsByClassName('array-bar');
+        for (let i = 0; i < animations.length; i++) {
+            
+            if(animations[i].length>1){
+                    for (let j = 0; j < animations[i].length - 1; j++) {
+
+                        setTimeout(() => {
+                            const [barOneIdx] = animations[i][j];
+                            const [barTwoIdx] = animations[i][j + 1];
+                            const barOneStyle = arrayBars[barOneIdx].style;
+                            const barTwoStyle = arrayBars[barTwoIdx].style;
+                            let barOneHeight=barOneStyle.height;
+                            let barTwoHeight=barTwoStyle.height;
+                            barOneStyle.height = barTwoHeight;
+                            barTwoStyle.height = barOneHeight;
+                        }, i * SpeedOfSorting*10);
+                }
+            }
+        }
+
     }
     function randomIntFromInterval(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -129,8 +157,8 @@ const DashBoard = () => {
             {/* <FormSection/> */}
             <div className='form-section'>
                 <h1 style={{
-                    'color':'white',
-                    'fontFamily':'cursive'
+                    'color': 'white',
+                    'fontFamily': 'cursive'
                 }}>Sorting Visualizer</h1>
                 <Form className='d-flex flex-column justify-content-center'>
                     <Form.Group className='p-3'>

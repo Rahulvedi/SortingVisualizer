@@ -116,3 +116,26 @@ export function getSelectionSortAnimation(arr) {
   }
   return animations
 }
+export function getInsertionSortAnimation(arr)
+{ 
+    let animation=[];
+    let n=arr.length
+    let i, key, j;
+    for (i = 1; i < n; i++)
+    {
+      let subanimation=[];
+        subanimation.push([i,arr[i]])
+        key = arr[i];
+        j = i - 1;
+
+        while (j >= 0 && arr[j] > key)
+        { 
+          arr[j + 1] = arr[j];
+          subanimation.push([j,arr[j]])
+            j = j - 1;
+        }
+        animation.push(subanimation)
+        arr[j + 1] = key;
+    }
+    return animation
+}
