@@ -92,50 +92,68 @@ export function getBubbleSortAnimation(arr) {
         arr[j] = arr[j + 1];
         arr[j + 1] = temp;
       }
-      animations.push([j,arr[j]]);
-      animations.push([j+1,arr[j+1]]);
+      animations.push([j, arr[j]]);
+      animations.push([j + 1, arr[j + 1]]);
     }
   }
-  return animations
+  return animations;
 }
 export function getSelectionSortAnimation(arr) {
   const animations = [];
   for (var i = 0; i < arr.length; i++) {
-      let min = i;
-      for (var j = i + 1; j < arr.length; j++) {
-          if (arr[min] > arr[j]) {
-              min = j;
-          }
+    let min = i;
+    for (var j = i + 1; j < arr.length; j++) {
+      if (arr[min] > arr[j]) {
+        min = j;
       }
-      if (i !== min) {
-          [arr[ i ],arr[min]]= [arr[min],arr[ i ]];
-          animations.push([i,arr[i]])
-          animations.push([min,arr[min]])
-  
-      }
-  }
-  return animations
-}
-export function getInsertionSortAnimation(arr)
-{ 
-    let animation=[];
-    let n=arr.length
-    let i, key, j;
-    for (i = 1; i < n; i++)
-    {
-      let subanimation=[];
-        subanimation.push([i,arr[i]])
-        key = arr[i];
-        j = i - 1;
-
-        while (j >= 0 && arr[j] > key)
-        { 
-          arr[j + 1] = arr[j];
-          subanimation.push([j,arr[j]])
-            j = j - 1;
-        }
-        animation.push(subanimation)
-        arr[j + 1] = key;
     }
-    return animation
+    if (i !== min) {
+      [arr[i], arr[min]] = [arr[min], arr[i]];
+      animations.push([i, arr[i]]);
+      animations.push([min, arr[min]]);
+    }
+  }
+  return animations;
+}
+export function getInsertionSortAnimation(arr) {
+  let animation = [];
+  let n = arr.length;
+  let i, key, j;
+  for (i = 1; i < n; i++) {
+    let subanimation = [];
+    subanimation.push([i, arr[i]]);
+    key = arr[i];
+    j = i - 1;
+
+    while (j >= 0 && arr[j] > key) {
+      arr[j + 1] = arr[j];
+      subanimation.push([j, arr[j]]);
+      j = j - 1;
+    }
+    animation.push(subanimation);
+    arr[j + 1] = key;
+  }
+  return animation;
+}
+export function getQuickSortAnimation(array, start, end) {
+  if (start === undefined) {
+    start = 0;
+    end = array.length - 1;
+  } else if (start >= end) {
+    return array;
+  }
+  var rStart = start,
+    rEnd = end;
+  var pivot = array[Math.floor(Math.random() * (end - start + 1) + start)];
+  while (start < end) {
+    while (array[start] <= pivot) start++;
+    while (array[end] > pivot) end--;
+    if (start < end) {
+      var temp = array[start];
+      array[start] = array[end];
+      array[end] = temp;
+    }
+  }
+  getQuickSortAnimation(array, rStart, start - 1);
+  getQuickSortAnimation(array, start, rEnd);
 }

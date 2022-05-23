@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import './DashBoard.css'
 import { Form, Button } from 'react-bootstrap'
 import Visualizer from '../Visualizer/Visualizer'
-import { getMergeSortAnimations, getBubbleSortAnimation, getSelectionSortAnimation, getInsertionSortAnimation } from '../SortingAlgorithums'
+import { getMergeSortAnimations, getBubbleSortAnimation, getSelectionSortAnimation, getInsertionSortAnimation, getQuickSortAnimation } from '../SortingAlgorithums'
 const DashBoard = () => {
-    var options = ['Bubble Sort', 'Selection Sort', 'Insertion Sort', 'Quick Sort', 'Merge Sort']
+    // 'Insertion Sort', yet to be added
+    var options = ['Bubble Sort', 'Selection Sort',  'Quick Sort', 'Merge Sort']
     const [Method, setMethod] = useState('Bubble Sort')
     const [SizeOfArray, setSizeOfArray] = useState(50)
-    const [SpeedOfSorting, setSpeedOfSorting] = useState(10)
+    const [SpeedOfSorting, setSpeedOfSorting] = useState(20)
     // const [IsSorting, setIsSorting] = useState(false)
     const [Array, setArray] = useState([]);
     // const [Max, setMax] = useState(100);
@@ -31,6 +32,7 @@ const DashBoard = () => {
     }
     const OnSpeedChange = (e) => {
         setSpeedOfSorting(e.target.value)
+        console.log(SpeedOfSorting)
     }
     const StartSorting = () => {
         // setIsSorting(true)
@@ -46,6 +48,9 @@ const DashBoard = () => {
                 break
             case 'Insertion Sort':
                 insertionsort()
+                break
+            case 'Quick Sort':
+                bubbleSort()
                 break
             default:
                 bubbleSort();
@@ -64,13 +69,13 @@ const DashBoard = () => {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * SpeedOfSorting);
+                }, i * SpeedOfSorting * 10);
             } else {
                 setTimeout(() => {
                     const [barOneIdx, newHeight] = animations[i];
                     const barOneStyle = arrayBars[barOneIdx].style;
                     barOneStyle.height = `${newHeight * 5}px`;
-                }, i * SpeedOfSorting);
+                }, i * SpeedOfSorting * 10);
             }
         }
     }
@@ -87,13 +92,13 @@ const DashBoard = () => {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * SpeedOfSorting * 5);
+                }, i * SpeedOfSorting * 10);
             } else {
                 setTimeout(() => {
                     const [barOneIdx, newHeight] = animations[i];
                     const barOneStyle = arrayBars[barOneIdx].style;
                     barOneStyle.height = `${newHeight * 5}px`;
-                }, i * SpeedOfSorting * 5);
+                }, i * SpeedOfSorting * 10);
             }
         }
     }
@@ -110,7 +115,7 @@ const DashBoard = () => {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = 'red';
                     barTwoStyle.backgroundColor = 'red';
-                }, i * SpeedOfSorting * 10);
+                }, i * SpeedOfSorting * 20);
             } else {
                 const [barOneIdx, barOneHeight] = animations[i - 1];
                 const [barTwoIdx, barTwoHeight] = animations[i];
@@ -121,7 +126,7 @@ const DashBoard = () => {
                     barTwoStyle.backgroundColor = 'white';
                     barOneStyle.height = `${barOneHeight * 5}px`;
                     barTwoStyle.height = `${barTwoHeight * 5}px`;
-                }, i * SpeedOfSorting * 10);
+                }, i * SpeedOfSorting * 20);
             }
         }
     }
@@ -130,24 +135,29 @@ const DashBoard = () => {
         console.log(animations)
         const arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 0; i < animations.length; i++) {
-            
-            if(animations[i].length>1){
-                    for (let j = 0; j < animations[i].length - 1; j++) {
 
-                        setTimeout(() => {
-                            const [barOneIdx] = animations[i][j];
-                            const [barTwoIdx] = animations[i][j + 1];
-                            const barOneStyle = arrayBars[barOneIdx].style;
-                            const barTwoStyle = arrayBars[barTwoIdx].style;
-                            let barOneHeight=barOneStyle.height;
-                            let barTwoHeight=barTwoStyle.height;
-                            barOneStyle.height = barTwoHeight;
-                            barTwoStyle.height = barOneHeight;
-                        }, i * SpeedOfSorting*10);
+            if (animations[i].length > 1) {
+                for (let j = 0; j < animations[i].length - 1; j++) {
+                    const [barOneIdx] = animations[i][j];
+                    const [barTwoIdx] = animations[i][j + 1];
+                    const barOneStyle = arrayBars[barOneIdx].style;
+                    const barTwoStyle = arrayBars[barTwoIdx].style;
+                    barOneStyle.backgroundColor = 'red';
+                    setTimeout(() => {
+                        let barOneHeight = barOneStyle.height;
+                        let barTwoHeight = barTwoStyle.height;
+                        barOneStyle.height = barTwoHeight;
+                        barTwoStyle.height = barOneHeight;
+                        barOneStyle.backgroundColor = 'white';
+                    }, i * SpeedOfSorting * 10);
                 }
             }
         }
 
+    }
+    const quicksort = () => {
+        const animation = getQuickSortAnimation(Array);
+        console.log(animation)
     }
     function randomIntFromInterval(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -171,11 +181,11 @@ const DashBoard = () => {
                     </Form.Group >
                     <Form.Group className='p-3'>
                         <Form.Label className='label' >Size of Array</Form.Label>
-                        <Form.Range min='20' max='80' onChange={OnSizeChange} />
+                        <Form.Range min='20' max='80' onChange={OnSizeChange}  />
                     </Form.Group>
                     <Form.Group className='p-3'>
                         <Form.Label className='label'>Speed of Sorting</Form.Label>
-                        <Form.Range min='10' max='50' onChange={OnSpeedChange} />
+                        <Form.Range min='10' max='50' onChange={OnSpeedChange} style={{direction:'rtl'}} />
                     </Form.Group>
                     <Form.Group className='p-2'>
                         <Button className='mb-4 btn' onClick={ResetArray}>Genrate New Array</Button>
